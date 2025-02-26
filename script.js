@@ -46,6 +46,10 @@ function startCall() {
             peer.on('signal', data => {
                 // Send signal data to the server to establish connection
                 console.log('SIGNAL', JSON.stringify(data));
+                // Simulate sending signal data to the other peer
+                if (!peer.initiator) {
+                    peer.signal(data);
+                }
             });
 
             peer.on('stream', stream => {
@@ -56,7 +60,12 @@ function startCall() {
             });
 
             // Simulate receiving signal data from the server
-            peer.signal(/* received signal data */);
+            if (peer.initiator) {
+                setTimeout(() => {
+                    // Simulate receiving signal data from the other peer
+                    peer.signal(/* received signal data */);
+                }, 1000);
+            }
         })
         .catch(error => {
             console.error('Error accessing media devices.', error);
